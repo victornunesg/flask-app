@@ -1,0 +1,13 @@
+{% extends 'base.html' %} <!--informa que esse arquivo puxa informacoes do base.html-->
+
+{% block body %}
+
+<div class="container"> <!--using a container to give a better format/structure in the page-->
+    <h1>Usuários</h1>
+    {% for usuario in lista_usuarios %} <!--atraves dessa estrutura, é possível escrever comandos python dentro do html-->
+        <p><strong>{{ usuario }}</strong></p> <!--exibe a lista de usuarios criadas no main em python, um em cada paragrafo e em negrito-->
+        <hr> <!--exibe uma linha após cada nome-->
+    {% endfor %}
+</div>
+
+{% endblock %}
