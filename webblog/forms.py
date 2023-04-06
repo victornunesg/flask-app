@@ -3,7 +3,7 @@
 # para instalar seria flask-wtf e para importar flask_wtf
 # temos na bibliteca wtforms os validators, para validarem campos a serem preenchidos pelo usuario
 
-from flask_wtf import FlaskForm
+from flask_wtf import FlaskForm  # (install flask-wtf)
 # formulário web do flask
 from wtforms import StringField, PasswordField, SubmitField, BooleanField
 # importando os tipos de campo do wtforms
