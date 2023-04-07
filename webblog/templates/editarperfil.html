@@ -2,16 +2,21 @@
 
 {% block form_editar_perfil %}
     <!--Definindo o bloco de editar perfil que foi criado dentro do arquivo perfil.html-->
-    <!--Fizemos uma copia do arquivo login.html e editamos para o formulario em questao-->  
+    <!--Fizemos uma copia do arquivo login.html e editamos para o formulario em questao-->
+    <!--As classes das divs são oriundas do bootstrap-->
 <div class="container">
     <hr>
     <div class="row">
         <div class="col">
-            <form method="POST" action="" class="border p-4 mt-2">
+
+            <!-- Sempre que existir um formulário envolvendo uploda de arquivos, é necesśario passar o parâmetro
+            'enctype' para que as validações funcionem e que o arquivo possa ser lido adequadamente-->
+
+            <form method="POST" action="" class="border p-4 mt-2" enctype="multipart/form-data">
                 {{ form.csrf_token }}
                 <legend>Editar Perfil</legend>
                 <fieldset>
-                    <div class="form-group">
+                    <div class="form-group mt-2">
                         {{ form.username.label(class="form-control-label") }}
                         {% if form.username.errors %}
                             {{ form.username(class="form-control is-invalid") }}
@@ -25,7 +30,7 @@
                         {% endif %}
                     </div>
                     
-                    <div class="form-group">
+                    <div class="form-group mt-2">
                         {{ form.email.label(class="form-control-label") }}
                         {% if form.email.errors %}
                             {{ form.email(class="form-control is-invalid") }}
@@ -38,9 +43,36 @@
                             {{ form.email(class="form-control") }}
                         {% endif %}
                     </div>
+
+                    <div class="form-group mt-2">
+                        {{ form.foto_perfil.label }}
+                        <br>
+                        {{ form.foto_perfil(class="form-control-file") }}
+                        {% if form.foto_perfil.errors %}
+                            {% for erro in form.foto_perfil.errors %}
+                                <span class="text-danger"> {{ erro}} </span>
+                                <br>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+
+                    <hr>
+                    <p>Meus Cursos</p>
+                    <!--Exibe todos os campos que se iniciam com 'cursos_' dentro do formulário usando o laço for-->
+                    {% for campo in form %}
+                        {% if 'curso_' in campo.name %}
+                            <div class="form-group mt-2">
+                                {{ campo(class="form-check-input") }}
+                                {{ campo.label(class="form-check-label") }}<br>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+
                 </fieldset>
 
-                {{ form.botao_submit_editar_perfil(class="btn btn-primary mt-2") }} <!--aqui tambem foi aplicado margin-top no botão-->
+                <!--Foi aplicado margin-top nos botões-->
+                <hr>
+                {{ form.botao_submit_editar_perfil(class="btn btn-primary mt-3") }}
 
             </form>
       </div>

@@ -8,6 +8,11 @@ from flask_login import current_user  # método que verifica o usuário que est�
 from flask_login import login_required
 # função que usamos como um decorator, para controle/bloqueio de páginas por usuários não logados
 
+import secrets, os
+# secrets para gerar o código para atualizar imagem de perfil e OS para separar o nome da imagem da extensão
+
+from PIL import Image  # biblioteca Pillow (install Pillow) para compactar a imagem de maneira fácil
+
 lista_usuarios = ['Victor', 'Yasmin']  # definindo lista de usuarios do blog
 
 
@@ -45,7 +50,7 @@ def login():
             # chama o método login_user para confirmar o login do usuário (primeiro parâmetro)
             # também controla o 'lembrar dados de acesso', como segundo parâmetro 'remember', aceita booleano
             flash(f'Login feito com sucesso no e-mail {form_login.email.data}', 'alert-success')
-            # passando parametros da função flash, a mensagem (.data para pegar o valor preenchido)
+            # passando parâmetros da função flash, a mensagem (.data para pegar o valor preenchido)
             # e a categoria, de acordo com a documentação do flask e bootstrap
             par_next = request.args.get('next')
             # verificar se há algum parâmetro next na URL para saber se mandaremos para outra página específica
@@ -62,7 +67,7 @@ def login():
         # transformará a senha do usuário em criptografada
         # para verificar se as senhas batem, utiliza-se o método bcrypt.check_password_hash(SENHA1, SENHA2)
         usuario = Usuario(username=form_criarconta.username.data, email=form_criarconta.email.data, senha=senha_cript)
-        # criando um novo usuario, instanciando a classe Usuario() - cada usuário seria um novo objeto
+        # cria novo usuario, instanciando a classe Usuario() - cada usuário seria um novo objeto
         database.session.add(usuario)  # adicionando a variável usuario à sessão do banco de dados
         database.session.commit()  # inserindo os dados no banco de dados
         flash(f'Conta criada para o e-mail: {form_criarconta.email.data}', 'alert-success')
@@ -95,12 +100,68 @@ def criar_post():
     return render_template('criarpost.html')
 
 
+def salvar_imagem(imagem):
+    # gera código aleatório de 8bytes para evitar duplicidades de nome de foto no banco de dados
+    codigo = secrets.token_hex(8)
+
+    # separa o nome da imagem de sua extensão usando OS, armazena um em cada variável
+    nome, extensao = os.path.splitext(imagem.filename)
+
+    # junta novamente o nome da imagem adicionando o código gerado
+    nome_arquivo = nome + codigo + extensao
+
+    # define o caminho onde o arquivo será salvo, o app.root_path retorna o caminho do web-blog e o join junta tudo
+    caminho_completo = os.path.join(app.root_path, 'static/fotos_perfil', nome_arquivo)
+
+    # comprime o tamanho da imagem, pois no site é somente 400 por 400, variável tamanho é uma tupla com as dimensões
+    tamanho = (400, 400)
+    imagem_reduzida = Image.open(imagem)
+    imagem_reduzida.thumbnail(tamanho)
+
+    # salva a imagem na pasta static/fotos_perfil
+    imagem_reduzida.save(caminho_completo)
+
+    # retorna o novo nome da foto
+    return nome_arquivo
+
+
+def atualizar_cursos(form):
+    lista_cursos = []
+    for campo in form:
+        if 'curso_' in campo.name:
+            if campo.data:  # se o campo estiver marcado, adiciona na lista de cursos
+                lista_cursos.append(campo.label.text)
+    return ';'.join(lista_cursos)  # retornando uma string com os cursos separados por ;
+
+
+
 @app.route('/perfil/editar', methods=['GET', 'POST'])
 @login_required
 def editar_perfil():
     form = FormEditarPerfil()
-    if request.method == "GET":  # caso a operação seja GET (default) traz as informações do usuário para os campos
+
+    # caso a operação seja GET (default) traz as informações atuais do usuário para os campos do formulário
+    if request.method == "GET":
         form.username.data = current_user.username
         form.email.data = current_user.email
+
+    # se o formulário de editar o perfil for validado ao clicar em submit, atualiza os dados no banco de dados
+    if form.validate_on_submit() and 'botao_submit_editar_perfil' in request.form:
+        current_user.email = form.email.data
+        current_user.username = form.username.data
+        # verifica se houve o upload de uma nova foto para poder atualizá-la
+        if form.foto_perfil.data:
+            # chama a função salvar_imagem para realizar o tratamento da foto enviada pelo usuário
+            nome_imagem = salvar_imagem(form.foto_perfil.data)
+            # atualiza o campo foto_perfil do usuário para carregar a nova foto do perfil
+            current_user.foto_perfil = nome_imagem
+
+        # chama a função atualizar_cursos passando o formulário de parâmetro
+        current_user.cursos = atualizar_cursos(form)
+
+        database.session.commit()
+        flash(f'Perfil atualizado com sucesso!', 'alert-success')
+        return redirect(url_for('perfil'))
+
     foto_perfil = url_for('static', filename=f'fotos_perfil/{current_user.foto_perfil}')
     return render_template('editarperfil.html', foto_perfil=foto_perfil, form=form)

@@ -40,8 +40,8 @@ from webblog.models import Usuario, Post  # importando as classes Usuário e Pos
 # # fazendo consultas ao BD para verificar os usuarios
 # =====================================
 
-# with app.app_context():
-#     meus_usuarios = Usuario.query.all()  # pegando todas as informações do BD
+with app.app_context():
+    meus_usuarios = Usuario.query.all()  # pegando todas as informações do BD
 #     print(f'\nObtendo a lista de usuários com o query.all(): {meus_usuarios}')
 #     primeiro_usuario = Usuario.query.first()  # pegando apenas o primeiro usuario da lista
 #     primeiro_usuario = Usuario.query[0]  # pegando apenas o primeiro usuario da lista
@@ -58,11 +58,12 @@ from webblog.models import Usuario, Post  # importando as classes Usuário e Pos
 #     print(f'\nUsuario com o email = vitor3@gmail.com: {usuario_teste}')
 #     print(f'Username do usuario com o email = vitor3@gmail.com: {usuario_teste.username}')
 #
-# print('\nListando todas as informacoes do BD usando loop for:')
-# for usuario in meus_usuarios:
-#     print(f'Username: {usuario.username}')
-#     print(f'Email: {usuario.email}')
-#     print(f'Senha: {usuario.senha}')
+print('\nListando todas as informacoes do BD usando loop for:')
+for usuario in meus_usuarios:
+    print(f'Username: {usuario.username}')
+    print(f'Email: {usuario.email}')
+    print(f'Senha: {usuario.senha}')
+    print(f'Cursos: {usuario.cursos}')
 
 
 # =====================================

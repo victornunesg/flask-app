@@ -1,14 +1,16 @@
-# os formularios são um objetos dentro do python, uma classe
+# os formulários são objetos dentro do python, uma classe
 # no flask já temos formulários prontos, através da biblioteca flask wtf
 # para instalar seria flask-wtf e para importar flask_wtf
-# temos na bibliteca wtforms os validators, para validarem campos a serem preenchidos pelo usuario
+# temos na biblioteca wtforms os validators, para validarem campos a serem preenchidos pelo usuário
 
 from flask_wtf import FlaskForm  # (install flask-wtf)
 # formulário web do flask
+from flask_wtf.file import FileField, FileAllowed
+# filefield é usado para fazer o upload da foto de perfil e fileallowed é um validator para restringir o tipo da foto
 from wtforms import StringField, PasswordField, SubmitField, BooleanField
 # importando os tipos de campo do wtforms
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
-# importando validadores de: campo obrigatorio, tamanho, e-mail e comparação de campos (para senha)
+# importando validadores de: campo obrigatório, tamanho, e-mail e comparação de campos (para senha)
 # o wtforms não possui o e-mail validator embutido, necessário instalar via terminal: (install email_validator)
 from webblog.models import Usuario
 # precisaremos da classe usuário para realizar validações nos formulários
@@ -51,10 +53,25 @@ class FormLogin(FlaskForm):
 class FormEditarPerfil(FlaskForm):
     username = StringField('Nome de usuário', validators=[DataRequired()])
     email = StringField('E-mail', validators=[DataRequired(), Email()])
+    foto_perfil = FileField('Alterar foto do perfil', validators=[FileAllowed(['jpg', 'png', 'jpeg'])])
+    curso_excel = BooleanField('Excel Impressionador')
+    curso_vba = BooleanField('VBA Impressionador')
+    curso_powerbi = BooleanField('Power BI Impressionador')
+    curso_python = BooleanField('Python Impressionador')
+    curso_ppt = BooleanField('Apresentações Impressionadoras')
+    curso_sql = BooleanField('SQL Impressionador')
     botao_submit_editar_perfil = SubmitField('Confirmar Edição')
 
+    @staticmethod
     def validate_email(self, email):
         if current_user.email != email.data:
             usuario = Usuario.query.filter_by(email=email.data).first()
-        if usuario:  # não permite alteração de email se já existe no BD para outro usuário
-            raise ValidationError('Já existe um usuário com esse e-mail. Cadastre um novo e-mail.')
+            if usuario:  # não permite alteração de email se já existe no BD para outro usuário
+                raise ValidationError('Já existe um usuário com esse e-mail. Cadastre um novo e-mail.')
+
+    @staticmethod
+    def validate_username(self, username):
+        if current_user.username != username.data:
+            usuario = Usuario.query.filter_by(username=username.data).first()
+            if usuario:  # não permite alteração de email se já existe no BD para outro usuário
+                raise ValidationError('Já existe um usuário com esse username. Cadastre um novo username.')
