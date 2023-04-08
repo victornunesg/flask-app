@@ -7,7 +7,7 @@ from flask_wtf import FlaskForm  # (install flask-wtf)
 # formulário web do flask
 from flask_wtf.file import FileField, FileAllowed
 # filefield é usado para fazer o upload da foto de perfil e fileallowed é um validator para restringir o tipo da foto
-from wtforms import StringField, PasswordField, SubmitField, BooleanField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField
 # importando os tipos de campo do wtforms
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 # importando validadores de: campo obrigatório, tamanho, e-mail e comparação de campos (para senha)
@@ -75,3 +75,9 @@ class FormEditarPerfil(FlaskForm):
             usuario = Usuario.query.filter_by(username=username.data).first()
             if usuario:  # não permite alteração de email se já existe no BD para outro usuário
                 raise ValidationError('Já existe um usuário com esse username. Cadastre um novo username.')
+
+
+class FormCriarPost(FlaskForm):
+    titulo = StringField('Título do Post', validators=[DataRequired(), Length(2, 140)])
+    corpo = TextAreaField('Escreva seu Post aqui', validators=[DataRequired()])
+    botao_submit = SubmitField('Criar Post')

@@ -1,19 +1,19 @@
 from flask import render_template, flash, redirect, url_for, request
 from webblog import app, database, bcrypt
-from webblog.forms import FormLogin, FormCriarConta, FormEditarPerfil  # recomendado detalhar o caminho
-from webblog.models import Usuario  # conforme mencionado acima, poderia suprimir o 'webblog.'
+from webblog.forms import FormLogin, FormCriarConta, FormEditarPerfil, FormCriarPost  # recomendado detalhar o caminho
+from webblog.models import Usuario, Post  # conforme mencionado acima, poderia suprimir o 'webblog.'
 from flask_login import login_user, logout_user  # método que realiza o login e logout
 from flask_login import current_user  # método que verifica o usuário que está mexendo na página naquele momento
 # também possui o parâmetro de verificar se está logado ou não
 from flask_login import login_required
 # função que usamos como um decorator, para controle/bloqueio de páginas por usuários não logados
 
+from datetime import datetime
+
 import secrets, os
 # secrets para gerar o código para atualizar imagem de perfil e OS para separar o nome da imagem da extensão
 
 from PIL import Image  # biblioteca Pillow (install Pillow) para compactar a imagem de maneira fácil
-
-lista_usuarios = ['Victor', 'Yasmin']  # definindo lista de usuarios do blog
 
 
 # route é método que faz parte da classe Flask, o @ antes significa que é um decorator, é uma função que atribui uma
@@ -21,7 +21,8 @@ lista_usuarios = ['Victor', 'Yasmin']  # definindo lista de usuarios do blog
 # o seu codigo quando o link '/' for acionado, ou seja, homepage
 @app.route('/')  # mostra o caminho (URL) de onde a página será mostrada, nesse caso é a homepage
 def home():  # função que informa o que será mostrado na página, usaremos a pasta 'templates' para arquivos HTML
-    return render_template('home.html')  # função que diz qual arquivo HTML na pasta 'templates' será carregado
+    posts = Post.query.order_by(Post.id.desc())
+    return render_template('home.html', posts=posts)
 
 
 @app.route('/contato')
@@ -32,9 +33,12 @@ def contato():
 @app.route('/usuarios')
 @login_required  # com isso, somente quem está logado terá acesso à página
 def usuarios():
-    return render_template('usuarios.html', lista_usuarios=lista_usuarios)  # o primeiro parametro pode ser o nome
-    # que quiser, ja o segundo seria a lista criada anteriormente no python (por padrao usa o mesmo nome), pois
-    # o segundo nome vai ser a variavel python dentro do html em 'usuarios', estamos passando essa variavel pro HTML
+    # pegando todos os usuários do banco de dados e armazenando na variável "lista_usuários"
+    lista_usuarios = Usuario.query.all()
+    return render_template('usuarios.html', lista_usuarios=lista_usuarios)
+    # o primeiro parametro pode ser o nome que quiser, ja o segundo seria a lista criada anteriormente no python
+    # (por padrao usa o mesmo nome), pois o segundo nome vai ser a variavel python dentro do html em 'usuarios',
+    # estamos passando essa variavel pro HTML
 
 
 @app.route('/login', methods=['GET', 'POST'])  # methods autoriza os métodos GET e POST para submissão do formulário
@@ -94,10 +98,17 @@ def perfil():
     return render_template('perfil.html', foto_perfil=foto_perfil)
 
 
-@app.route('/post/criar')
+@app.route('/post/criar', methods=['GET', 'POST'])
 @login_required
 def criar_post():
-    return render_template('criarpost.html')
+    form = FormCriarPost()
+    if form.validate_on_submit():
+        post = Post(titulo=form.titulo.data, corpo=form.corpo.data, autor=current_user)
+        database.session.add(post)  # adicionando a variável usuario à sessão do banco de dados
+        database.session.commit()  # inserindo os dados no banco de dados
+        flash('Post criado com sucesso!', 'alert-success')
+        return redirect(url_for('home'))
+    return render_template('criarpost.html', form=form)
 
 
 def salvar_imagem(imagem):
@@ -132,7 +143,6 @@ def atualizar_cursos(form):
             if campo.data:  # se o campo estiver marcado, adiciona na lista de cursos
                 lista_cursos.append(campo.label.text)
     return ';'.join(lista_cursos)  # retornando uma string com os cursos separados por ;
-
 
 
 @app.route('/perfil/editar', methods=['GET', 'POST'])

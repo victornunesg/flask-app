@@ -2,7 +2,7 @@
 
 {% block body %}
 <!--código obtido através do bootstrap, adequado para o blog-->
-<!--formatando de acordo com os parametros do bootstrap-->
+<!--formatando de acordo com os parâmetros do bootstrap-->
 <div class="container mt-5 d-flex justify-content-center">
     <div class="card p-3">
         <div class="d-flex align-items-center">
@@ -19,7 +19,14 @@
                 <div class="p-2 mt-2 bg-primary d-flex justify-content-between rounded text-white stats">
                     <div class="d-flex flex-column">
                         <span class="articles">Cursos</span>
-                        <span class="number1">0</span>
+                        <!--Para somar a quantidade de cursos também poderíamos ter utilizado o split e depois contar o tamanho da lista-->
+                        <span class="number1">
+                            {% if 'Não informado' in current_user.cursos: %}
+                                {{ 0 }}
+                            {% else: %}
+                                {{ current_user.cursos.count(';') + 1 }}
+                            {% endif %}
+                        </span>
                     </div>
 
                     <div class="d-flex flex-column">
@@ -36,6 +43,19 @@
         </div>
     </div>
 </div>
+
+<!--nessa div estaremos colocando as tags com os cursos em que o usuário está inscrito-->
+<div class="row justify-content-center">
+    <div class="col col-4" style="text-align: center">
+        <strong>Cursos</strong><br>
+        <!--Transforma a string de cursos em uma lista para percorrer e gerar um botão diferente para cada curso-->
+        {% for curso in current_user.cursos.split(';') %}
+            <button type="button" class="btn btn-success mt-2" disabled>{{ curso }}</button>
+        {% endfor %}
+        </div>
+</div>
+
+
 {% block form_editar_perfil %}
     <!--Aqui somente inicializamos o bloco, o qual será detalhado no arquivo editarperfil.html
     dessa forma somente na página de editar o perfil, vai aparecer esse bloco-->

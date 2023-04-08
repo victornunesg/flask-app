@@ -1,8 +1,41 @@
 {% extends 'base.html' %} <!--informa que esse arquivo puxa informacoes do base.html-->
 
 {% block body %}
-<div class="container"> <!--using a container to give a better format/structure in the page-->
-    <h1>Homepage created successfully</h1>
-    <h2>Testing HTML file</h2>
+<div class="container mt-3"> <!--using a container to give a better format/structure in the page-->
+    <h1 style="color: blue">Seja bem vindo ao blog!</h1>
+    <hr>
+    <p>Confira os últimos posts:</p>
+    {% for post in posts %}
+        <!--meupost é uma classe que foi definida no css (main.css)-->
+        <div class="row border mt-4 p-4 meupost" >
+            <!--O Bootstrap divide a tela em linhas e colunas, onde o tamanho máximo de colunas (tela cheia) são 12
+            Desta forma, estamos dividindo em 2 colunas, uma com 3 posições e outra com 9, de modo a ocupar a tela toda-->
+            <div class="col col-2">
+                <div class="image pe-2">
+                    <img src="{{  url_for('static', filename='fotos_perfil/{}'.format(post.autor.foto_perfil)) }}" class="rounded" width="200" >
+                    <br>
+                    <strong>{{ post.autor.username }}</strong>
+
+                    <!--Div que coloca as tags dos cursos em que o usuário está inscrito-->
+                    <div class="row justify-content-center">
+                        <!--Transforma a string de cursos em uma lista para percorrer e gerar um botão diferente para cada curso-->
+                        {% for curso in post.autor.cursos.split(';') %}
+                            <button type="button" class="btn btn-success mt-2" disabled>{{ curso }}</button>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div class="col col-9">
+                <h3>{{ post.titulo }}</h3>
+                <p>{{ post.corpo }}</p>
+                <span>{{ post.data_criacao }}</span>
+                <br>
+
+            </div>
+        </div>
+
+        <!--Somente para dar um pequeno espaço até o rodapé-->
+        <div class="row mt-5"></div>
+    {% endfor %}
 </div>
 {% endblock %}

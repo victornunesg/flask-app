@@ -42,6 +42,7 @@ from webblog.models import Usuario, Post  # importando as classes Usuário e Pos
 
 with app.app_context():
     meus_usuarios = Usuario.query.all()  # pegando todas as informações do BD
+    meus_posts = Post.query.all()
 #     print(f'\nObtendo a lista de usuários com o query.all(): {meus_usuarios}')
 #     primeiro_usuario = Usuario.query.first()  # pegando apenas o primeiro usuario da lista
 #     primeiro_usuario = Usuario.query[0]  # pegando apenas o primeiro usuario da lista
@@ -64,6 +65,16 @@ for usuario in meus_usuarios:
     print(f'Email: {usuario.email}')
     print(f'Senha: {usuario.senha}')
     print(f'Cursos: {usuario.cursos}')
+    print(f'Foto do Perfil: {usuario.foto_perfil}')
+    print('\n')
+
+print('\n Listando todos os Posts no banco de dados')
+for posts in meus_posts:
+    print(f'ID: {posts.id}')
+    print(f'ID Usuario: {posts.id_usuario}')
+    print(f'Data de criacao: {posts.data_criacao}')
+    print(f'Titulo: {posts.titulo}')
+    print(f'Corpo: {posts.corpo}')
 
 
 # =====================================

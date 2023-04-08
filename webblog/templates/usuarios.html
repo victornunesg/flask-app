@@ -4,10 +4,65 @@
 
 <div class="container"> <!--using a container to give a better format/structure in the page-->
     <h1>Usuários</h1>
-    {% for usuario in lista_usuarios %} <!--atraves dessa estrutura, é possível escrever comandos python dentro do html-->
-        <p><strong>{{ usuario }}</strong></p> <!--exibe a lista de usuarios criadas no main em python, um em cada paragrafo e em negrito-->
-        <hr> <!--exibe uma linha após cada nome-->
+
+    <!--nessa parte faremos um for para mostrar usuário por usuário da lista e usamos parte do código da página 'perfil.html' para personalizar o front end-->
+    {% for usuario in lista_usuarios: %}
+
+        <div class="container mt-5 d-flex justify-content-center">
+            <div class="card p-3">
+                <div class="d-flex align-items-center">
+        
+                    <div class="image pe-2">
+                        <img src="{{ url_for('static', filename='fotos_perfil/{}'.format(usuario.foto_perfil)) }}" class="rounded" width="200" >
+                    </div>
+        
+                    <div class="ml-3 w-100">
+        
+                        <h4 class="mb-0 mt-0">{{ usuario.username }}</h4>
+                        <span>{{ usuario.email }}</span>
+        
+                        <div class="p-2 mt-2 bg-primary d-flex justify-content-between rounded text-white stats">
+                            <div class="d-flex flex-column">
+                                <span class="articles">Cursos</span>
+                                <!--Para somar a quantidade de cursos também poderíamos ter utilizado o split e depois contar o tamanho da lista-->
+                                <span class="number1">
+                                    {% if 'Não informado' in usuario.cursos: %}
+                                        {{ 0 }}
+                                    {% else: %}
+                                        {{ usuario.cursos.count(';') + 1 }}
+                                    {% endif %}
+                                </span>
+                            </div>
+        
+                            <div class="d-flex flex-column">
+                                <span class="rating">Posts</span>
+                                <span class="number3">0</span>
+                            </div>
+                        </div>
+        
+
+        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!--nessa div estaremos colocando as tags com os cursos em que o usuário está inscrito-->
+        <div class="row justify-content-center">
+            <div class="col col-4" style="text-align: center">
+                <strong>Cursos</strong><br>
+                <!--Transforma a string de cursos em uma lista para percorrer e gerar um botão diferente para cada curso-->
+                {% for curso in usuario.cursos.split(';') %}
+                    <button type="button" class="btn btn-success mt-2" disabled>{{ curso }}</button>
+                {% endfor %}
+                </div>
+        </div>
+
+        <!--Somente para dar um pequeno espaço até o rodapé-->
+        <div class="row mt-5"></div>
+
     {% endfor %}
+
 </div>
 
 {% endblock %}
