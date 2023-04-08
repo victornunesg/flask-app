@@ -1,7 +1,7 @@
-from flask import render_template, flash, redirect, url_for, request
+from flask import render_template, flash, redirect, url_for, request, abort
 from webblog import app, database, bcrypt
-from webblog.forms import FormLogin, FormCriarConta, FormEditarPerfil, FormCriarPost  # recomendado detalhar o caminho
-from webblog.models import Usuario, Post  # conforme mencionado acima, poderia suprimir o 'webblog.'
+from webblog.forms import FormLogin, FormCriarConta, FormEditarPerfil, FormCriarPost, FormEditarPost
+from webblog.models import Usuario, Post  # poderíamos suprimir o 'webblog.', mas é recomendado detalhar o caminho
 from flask_login import login_user, logout_user  # método que realiza o login e logout
 from flask_login import current_user  # método que verifica o usuário que está mexendo na página naquele momento
 # também possui o parâmetro de verificar se está logado ou não
@@ -21,6 +21,7 @@ from PIL import Image  # biblioteca Pillow (install Pillow) para compactar a ima
 # o seu codigo quando o link '/' for acionado, ou seja, homepage
 @app.route('/')  # mostra o caminho (URL) de onde a página será mostrada, nesse caso é a homepage
 def home():  # função que informa o que será mostrado na página, usaremos a pasta 'templates' para arquivos HTML
+    # ordenando a exibição dos Posts por ID
     posts = Post.query.order_by(Post.id.desc())
     return render_template('home.html', posts=posts)
 
@@ -175,3 +176,40 @@ def editar_perfil():
 
     foto_perfil = url_for('static', filename=f'fotos_perfil/{current_user.foto_perfil}')
     return render_template('editarperfil.html', foto_perfil=foto_perfil, form=form)
+
+
+@app.route('/post/<post_id>', methods=['GET', 'POST'])
+@login_required
+# <post_id> significa que iremos passar uma varíavel no link ao chamar a página, para exibir um post específico
+# a função de exibir o post também recebe o post_id como parâmetro
+def exibir_post(post_id):
+    post = Post.query.get(post_id)  # retornando o post que tem o id igual ao post_id (get pega pela chave primária)
+    if current_user == post.autor:
+        form = FormEditarPost()
+        #  Traz as informações atuais do post para os campos do formulário
+        if request.method == "GET":
+            form.titulo.data = post.titulo
+            form.corpo.data = post.corpo
+        elif form.validate_on_submit() and 'botao_submit' in request.form:
+            post.titulo = form.titulo.data
+            post.corpo = form.corpo.data
+            # o post já existe, portanto posso dar o commit diretamente, sem a necessidade do session.add
+            database.session.commit()
+            flash(f'Post editado com sucesso!', 'alert-success')
+            return redirect(url_for('home'))
+    else:
+        form = None  # temos que colocar o None para não haver erro na passagem de parâmetros se o usuário não for autor
+    return render_template('post.html', post=post, form=form)
+
+
+@app.route('/post/<post_id>/excluir', methods=['GET', 'POST'])
+@login_required
+def excluir_post(post_id):
+    post = Post.query.get(post_id)
+    if current_user == post.autor:
+        database.session.delete(post)
+        database.session.commit()
+        flash('Post excluído com sucesso', 'alert-danger')
+        return redirect(url_for('home'))
+    else:
+        abort(403)  # o abort informa mensagem de erro 403 (Forbidden)
