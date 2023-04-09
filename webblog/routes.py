@@ -22,8 +22,12 @@ from PIL import Image  # biblioteca Pillow (install Pillow) para compactar a ima
 @app.route('/')  # mostra o caminho (URL) de onde a página será mostrada, nesse caso é a homepage
 def home():  # função que informa o que será mostrado na página, usaremos a pasta 'templates' para arquivos HTML
     # ordenando a exibição dos Posts por ID
-    posts = Post.query.order_by(Post.id.desc())
-    return render_template('home.html', posts=posts)
+    check = Post.query.all()
+    if check:
+        posts = Post.query.order_by(Post.id.desc())
+        return render_template('home.html', posts=posts)
+    else:
+        abort(404)  # o abort informa mensagem de erro 403 (Forbidden)
 
 
 @app.route('/contato')

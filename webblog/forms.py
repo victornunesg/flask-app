@@ -27,17 +27,15 @@ class FormCriarConta(FlaskForm):
     confirmacao = PasswordField('Confirmar senha', validators=[DataRequired(), EqualTo('senha')])
     botao_submit_criar_conta = SubmitField('Criar conta')
     # o parâmetro validators sempre recebe uma lista
-
     # esse método do FlaskForm se integra ao 'validade_on_submit', ele roda com os demais validators
     # a função tem que começar sempre como 'validate_XXX' para funcionar adequadamente
-    @staticmethod
-    def validate_email(email):
+
+    def validate_email(self, email):
         usuario = Usuario.query.filter_by(email=email.data).first()  # verificando se usuario tem o mesmo e-mail no BD
         if usuario:  # se retorna algo em usuário, significa duplicidade de email, reportar erro
             raise ValidationError('E-mail já cadastrado. Cadastre-se com outro e-mail ou faça login para continuar.')
 
-    @staticmethod
-    def validate_username(username):
+    def validate_username(self, username):
         usuario = Usuario.query.filter_by(username=username.data).first()  # checando duplicidade de username
         if usuario:  # se retorna algo em usuário, significa duplicidade de username, reportar erro
             raise ValidationError('Usuário já cadastrado. Cadastre-se com outro usuario ou faça login para continuar.')
@@ -62,14 +60,13 @@ class FormEditarPerfil(FlaskForm):
     curso_sql = BooleanField('SQL Impressionador')
     botao_submit_editar_perfil = SubmitField('Confirmar Edição')
 
-    @staticmethod
     def validate_email(self, email):
         if current_user.email != email.data:
             usuario = Usuario.query.filter_by(email=email.data).first()
             if usuario:  # não permite alteração de email se já existe no BD para outro usuário
                 raise ValidationError('Já existe um usuário com esse e-mail. Cadastre um novo e-mail.')
 
-    @staticmethod
+
     def validate_username(self, username):
         if current_user.username != username.data:
             usuario = Usuario.query.filter_by(username=username.data).first()

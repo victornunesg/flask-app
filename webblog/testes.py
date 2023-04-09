@@ -12,7 +12,7 @@ from webblog.models import Usuario, Post  # importando as classes Usuário e Pos
 # =====================================
 # # criando o banco de dados
 # =====================================
-
+#
 # with app.app_context():
 #     database.create_all()  # após criar a base pela primeira vez, deixar esse comando comentado
 
@@ -43,16 +43,16 @@ from webblog.models import Usuario, Post  # importando as classes Usuário e Pos
 with app.app_context():
     meus_usuarios = Usuario.query.all()  # pegando todas as informações do BD
     meus_posts = Post.query.all()
-#     print(f'\nObtendo a lista de usuários com o query.all(): {meus_usuarios}')
-#     primeiro_usuario = Usuario.query.first()  # pegando apenas o primeiro usuario da lista
-#     primeiro_usuario = Usuario.query[0]  # pegando apenas o primeiro usuario da lista
-#     segundo_usuario = meus_usuarios[1]  # pegando apenas o segundo usuario da lista
-#
-#     # pegando informações dos usuarios
-#     print('\nObtendo informacoes dos usuarios')
-#     print(f'Email primeiro usuario: {primeiro_usuario.email}')
-#     print(f'ID primeiro usuario: {primeiro_usuario.id}')
-#     print(f'Qtde de posts primeiro usuario: {primeiro_usuario.posts}')
+    # print(f'\nObtendo a lista de usuários com o query.all(): {meus_usuarios}')
+    # primeiro_usuario = Usuario.query.first()  # pegando apenas o primeiro usuario da lista
+    # primeiro_usuario = Usuario.query[0]  # pegando apenas o primeiro usuario da lista
+    # segundo_usuario = meus_usuarios[1]  # pegando apenas o segundo usuario da lista
+    #
+    # # pegando informações dos usuarios
+    # print('\nObtendo informacoes dos usuarios')
+    # print(f'Email primeiro usuario: {primeiro_usuario.email}')
+    # print(f'ID primeiro usuario: {primeiro_usuario.id}')
+    # print(f'Qtde de posts primeiro usuario: {primeiro_usuario.posts}')
 #
 #     # utilizando busca com critérios no banco de dados, usando condições, como o e-mail por exemplo
 #     usuario_teste = Usuario.query.filter_by(email='vitor3@gmail.com').first()
