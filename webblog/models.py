@@ -31,6 +31,9 @@ class Usuario(database.Model, UserMixin):
     # o nome do parametro backref é o nome que iremos chamar dentro de Post para obter a informação do usuário que criou
     # lazy=True seria para obter todas as informações do banco de dados
 
+    # Recebe como parâmetro o self, que é a instância do usuário que estamos olhando
+    def contar_posts(self):
+        return len(self.posts)  # retorna como resposta a quantidade que o usuário tem de posts
 
 class Post(database.Model):
     id = database.Column(database.Integer, primary_key=True)
