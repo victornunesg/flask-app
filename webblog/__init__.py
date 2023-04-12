@@ -5,6 +5,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy  # (install flask-sqlalchemy) para usar o banco de dados
 from flask_login import LoginManager  # (install flask-login) para validar dados de login
 from flask_bcrypt import Bcrypt  # (install flask_bcrypt) para criptografia de senhas
+import os  # para auxiliar na conexão com o banco de dados PostgreSQL, no Railway, para manipular variáveis de ambiente
 
 app = Flask(__name__)
 # app é uma instancia da classe flask com o parâmetro name
@@ -19,10 +20,17 @@ app.config['SECRET_KEY'] = '952975e9b8f4856c555784420cf99476'
 # após isso será gerado token hex com 16 caracteres
 # com isso, passamos uma configuração no nosso arquivo main para o app do flask, a chave do app
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///banco_de_dados.db'
-# configurar o app informando onde ficará o banco de dados do aplicativo
+if os.getenv("DATABASE_URL"):  # comando para pegar a variável de ambiente do Banco de Dados PostgreSQL
+    # se a variável 'DATABASE_URL' existe, ou seja, se o código está sendo rodado pelo servidor, pega o BD de lá
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL")
+else:
+    # caso contrário, utiliza o BD local
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///banco_de_dados.db'
+
+# acima temos a configuração de onde ficará o banco de dados do aplicativo
 # esse _DATABASE_URI é o caminho local onde ficará o banco de dados, 'sqlite:///' por padrão seguido do nome do BD
 # significa que o BD será criado no mesmo local do programa, localmente
+# já a primeira clausula do if verifica se existe a variável de ambiente do BD do servidor
 
 bcrypt = Bcrypt(app)  # criando instância do Bcrypt. Somente nosso site será capaz de criptografar/descriptografar
 login_manager = LoginManager(app)  # declarando a variável para aplicar a classe login manager dentro do app

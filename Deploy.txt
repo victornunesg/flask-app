@@ -1,0 +1,15 @@
+1) Criar o arquivo (sem extensão) chamado 'Procfile'
+2) Digitar na primeira linha: 'web: gunicorn main:app'
+    main deve ser o nome do arquivo que executa o projeto, nesse caso main chama app
+    gunicorn é conmo se fosse o gerenciador do servidor, intermediário entre o código e o servidor e que gerencia as requisições
+3) Instalar o gunicorn, via terminal (pip install gunicorn)
+4) Criar arquivo 'requirements' que vai dizer ao servidor quais as bibliotecas que estamos utilizando
+    O comando pip freeze no terminal nos traz todas as bibliotecas utilizadas
+    Para criar o arquivo 'requirements' basta inserir o comando 'pip freeze > requirements.txt'
+    O servidor procura esse arquivo no momento do deploy para identificar o que precisa ser instalado para que a aplicação funcione
+5) A partir daí, utilizar o Github para fazer login no Railway para prosseguir com o deploy
+6) No Railway, criar um novo projeto e, antes de tudo, ir na opção 'Provision PostgreSQL' para criar um banco de dados online
+7) Agora deve-se alterar o apontamento do banco de dados local para o online, no arquivo __init__
+8) No Railway, clicar no Banco de Dados Postgre > Connect.
+    Ao invés de copiar o código de conexão direta com o servidor e colar no código (link fixo), iremos pegar o valor desse link por meio da variável de ambiente do Railway (DATABASE_URL)
+    Importar a biblioteca 'OS' dentro do __init__
