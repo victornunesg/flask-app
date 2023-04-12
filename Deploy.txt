@@ -12,4 +12,11 @@
 7) Agora deve-se alterar o apontamento do banco de dados local para o online, no arquivo __init__
 8) No Railway, clicar no Banco de Dados Postgre > Connect.
     Ao invés de copiar o código de conexão direta com o servidor e colar no código (link fixo), iremos pegar o valor desse link por meio da variável de ambiente do Railway (DATABASE_URL)
+    Copiar o endereço da variável DATABASE_URL para inserir no código do projeto
     Importar a biblioteca 'OS' dentro do __init__
+    Inserir um condicional para conectar ou com o BD do Servidor ou com o BD local (ver em __init__)
+9) Feito isso, dar commit e push no github para sincronizar o código no repositório remoto, pois o Railway está sincronizado com o Github
+10) No Railway, dentro do projeto, ir em New > Github Repo e selecionar o repositório a ser importado para iniciar o deploy
+11) Finalizando o deploy, clicar no repositório espelhado no Railway e ir em Settings > Generate Domain para criar o domínio do site
+12) Caso dê problema no deploy, verificar os logs para entender o motivo. Normalmente pede-se a instalação do psycopg2 para realizar a comunicação com o BD do servidor
+    terminal > pip install psycopg2
