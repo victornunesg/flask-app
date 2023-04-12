@@ -10,7 +10,8 @@ from flask_login import login_required
 
 from datetime import datetime
 
-import secrets, os
+import secrets
+import os
 # secrets para gerar o código para atualizar imagem de perfil e OS para separar o nome da imagem da extensão
 
 from PIL import Image  # biblioteca Pillow (install Pillow) para compactar a imagem de maneira fácil
