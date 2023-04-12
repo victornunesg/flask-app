@@ -19,4 +19,9 @@
 10) No Railway, dentro do projeto, ir em New > Github Repo e selecionar o repositório a ser importado para iniciar o deploy
 11) Finalizando o deploy, clicar no repositório espelhado no Railway e ir em Settings > Generate Domain para criar o domínio do site
 12) Caso dê problema no deploy, verificar os logs para entender o motivo. Normalmente pede-se a instalação do psycopg2 para realizar a comunicação com o BD do servidor
-    terminal > pip install psycopg2
+    VERIFICAR COMO INSTALAR O PSYCOPG2, NÃO ESTÁ USANDO O BANCO DE DADOS DO SERVIDOR E SIM O LOCAL
+    Caso não dê certo, tentar o comando sudo apt install libpq-dev python3-dev diretamente no terminal antes de tentar novamente o comando acima
+    Caso ainda não funcione, tentar o comando sudo apt install postgresql-server-dev-all diretamente no terminal antes de tentar novamente o comando anterior
+    Atualizar o requirements rodando de novo 'pip freeze > requirements.txt'
+    Feito isso, dar o commit e push para atualizar o Github
+    Assim que o Github for atualizado, o Railway identificará as alterações e seguirá para um novo deploy automaticamente
