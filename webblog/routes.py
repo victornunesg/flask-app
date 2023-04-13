@@ -43,11 +43,29 @@ def usuarios():
     # estamos passando essa variavel pro HTML
 
 
+@app.route('/cadastro', methods=['GET', 'POST'])
+def cadastro():
+    form_criarconta = FormCriarConta()  # form_criarconta será instância da classe FormCriarConta()
+    if form_criarconta.validate_on_submit() and 'botao_submit_criar_conta' in request.form:
+        senha_cript = bcrypt.generate_password_hash(form_criarconta.senha.data)
+        # transformará a senha do usuário em criptografada
+        # para verificar se as senhas batem, utiliza-se o método bcrypt.check_password_hash(SENHA1, SENHA2)
+        usuario = Usuario(username=form_criarconta.username.data, email=form_criarconta.email.data, senha=senha_cript)
+        # cria novo usuario, instanciando a classe Usuario() - cada usuário seria um novo objeto
+        database.session.add(usuario)  # adicionando a variável usuario à sessão do banco de dados
+        database.session.commit()  # inserindo os dados no banco de dados
+        login_user(usuario)  # realiza o login na sequência
+        flash(f'Conta criada para o e-mail: {form_criarconta.email.data}', 'alert-success')
+        return redirect(url_for('home'))
+
+    return render_template('cadastro.html', form_criarconta=form_criarconta)
+    # passando as duas informações de formulário para o HTML 'cadastro.html', para serem usados
+
+
 @app.route('/login', methods=['GET', 'POST'])  # methods autoriza os métodos GET e POST para submissão do formulário
 # por definição apenas o método GET é liberado, estamos liberando o POST para não dar erro ao submeter
 def login():
     form_login = FormLogin()  # form_login será instância da classe FormLogin(), em forms.py
-    form_criarconta = FormCriarConta()  # form_criarconta será instância da classe FormCriarConta()
     # se o formulario de login for validado ao clicar em submit no botão de login
     if form_login.validate_on_submit() and 'botao_submit_login' in request.form:
         usuario = Usuario.query.filter_by(email=form_login.email.data).first()
@@ -68,19 +86,7 @@ def login():
         else:
             flash('Falha no login, e-mail ou senha incorretos', 'alert-danger')
 
-    if form_criarconta.validate_on_submit() and 'botao_submit_criar_conta' in request.form:
-        senha_cript = bcrypt.generate_password_hash(form_criarconta.senha.data)
-        # transformará a senha do usuário em criptografada
-        # para verificar se as senhas batem, utiliza-se o método bcrypt.check_password_hash(SENHA1, SENHA2)
-        usuario = Usuario(username=form_criarconta.username.data, email=form_criarconta.email.data, senha=senha_cript)
-        # cria novo usuario, instanciando a classe Usuario() - cada usuário seria um novo objeto
-        database.session.add(usuario)  # adicionando a variável usuario à sessão do banco de dados
-        database.session.commit()  # inserindo os dados no banco de dados
-        login_user(usuario)  # realiza o login na sequência
-        flash(f'Conta criada para o e-mail: {form_criarconta.email.data}', 'alert-success')
-        return redirect(url_for('home'))
-
-    return render_template('login.html', form_login=form_login, form_criarconta=form_criarconta)
+    return render_template('login.html', form_login=form_login)
     # passando as duas informações de formulário para o HTML 'login.html', para serem usados
 
 
@@ -180,28 +186,33 @@ def editar_perfil():
     return render_template('editarperfil.html', foto_perfil=foto_perfil, form=form)
 
 
+@app.route('/post/<post_id>/editar', methods=['GET', 'POST'])
+@login_required
+def editar_post(post_id):
+    post = Post.query.get(post_id)
+    form = FormEditarPost()
+    #  Traz as informações atuais do post para os campos do formulário
+    if request.method == "GET":
+        form.titulo.data = post.titulo
+        form.corpo.data = post.corpo
+    elif form.validate_on_submit() and 'botao_submit' in request.form:
+        post.titulo = form.titulo.data
+        post.corpo = form.corpo.data
+        # o post já existe, portanto posso dar o commit diretamente, sem a necessidade do session.add
+        database.session.commit()
+        flash(f'Post editado com sucesso!', 'alert-success')
+        return redirect(url_for('home'))
+
+    return render_template('editarpost.html', post=post, form=form)
+
+
 @app.route('/post/<post_id>', methods=['GET', 'POST'])
 @login_required
 # <post_id> significa que iremos passar uma varíavel no link ao chamar a página, para exibir um post específico
 # a função de exibir o post também recebe o post_id como parâmetro
 def exibir_post(post_id):
     post = Post.query.get(post_id)  # retornando o post que tem o id igual ao post_id (get pega pela chave primária)
-    if current_user == post.autor:
-        form = FormEditarPost()
-        #  Traz as informações atuais do post para os campos do formulário
-        if request.method == "GET":
-            form.titulo.data = post.titulo
-            form.corpo.data = post.corpo
-        elif form.validate_on_submit() and 'botao_submit' in request.form:
-            post.titulo = form.titulo.data
-            post.corpo = form.corpo.data
-            # o post já existe, portanto posso dar o commit diretamente, sem a necessidade do session.add
-            database.session.commit()
-            flash(f'Post editado com sucesso!', 'alert-success')
-            return redirect(url_for('home'))
-    else:
-        form = None  # temos que colocar o None para não haver erro na passagem de parâmetros se o usuário não for autor
-    return render_template('post.html', post=post, form=form)
+    return render_template('post.html', post=post)
 
 
 @app.route('/post/<post_id>/excluir', methods=['GET', 'POST'])

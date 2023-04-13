@@ -61,7 +61,7 @@ class FormEditarPerfil(FlaskForm):
     curso_vba = BooleanField('VBA Impressionador')
     curso_powerbi = BooleanField('Power BI Impressionador')
     curso_python = BooleanField('Python Impressionador')
-    curso_ppt = BooleanField('Power Point Impressionadoras')
+    curso_ppt = BooleanField('Power Point Impressionador')
     curso_sql = BooleanField('SQL Impressionador')
     botao_submit_editar_perfil = SubmitField('Confirmar Edição')
 

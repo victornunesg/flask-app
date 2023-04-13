@@ -30,8 +30,8 @@
                     <!--strftime é uma função que formata uma data de acordo com o especificado em seu parâmetro, o padrão é %d/%m/%Y -->
                     <small class="text-muted" style="font-size:15px">
                         -   Data de criação: {{ post.data_criacao.strftime('%d/%m/%Y') }}
-                        {% if form %}  <!-- caso o usuário seja o dono do post, o form de edição do post aparecerá, então disponibilzaremos os links conforme abaixo-->
-                            - <a href="#form_editarpost">Editar Post</a> /
+                        {% if current_user == post.autor %}  <!-- caso o usuário seja o dono do post, o form de edição do post aparecerá, então disponibilzaremos os links conforme abaixo-->
+                            - <a href="{{ url_for('editar_post', post_id=post.id) }}">Editar Post</a> /
                             <a href="" data-bs-toggle="modal" data-bs-target="#ExcluirPost" class="text-danger">Excluir Post</a> <!--Faz o link com o Modal, do Bootstrap (definido por último no código)-->
                         {% endif %}
 
@@ -46,46 +46,12 @@
 
         <!--No bloco abaixo, caso o usuário logado seja o autor do post, aparecerá o formulário para edição
             Basicamente adaptamos o formulário de criar post em cirarpost.html-->
-        {% if form %}
-            <div class="container mt-5">
-            <form method="POST" action="" id="form_editarpost" class="border p-4 mt-2">
-                {{ form.csrf_token }}
-                <legend>Editar Post</legend>
 
-                <fieldset>
-                    <div class="form-group">
-                        {{ form.titulo.label(class="form-control-label") }}
-                        {% if form.titulo.errors %}
-                            {{ form.titulo(class="form-control is-invalid") }}
-                            <div class="invalid-feedback">
-                                {% for erro in form.titulo.errors %}
-                                    {{ erro }}
-                                {% endfor %}
-                            </div>
-                        {% else %}
-                            {{ form.titulo(class="form-control") }}
-                        {% endif %}
-                    </div>
+            {% block form_editar_post %}
+             <!--Aqui somente inicializamos o bloco, o qual será detalhado no arquivo editarperfil.html
+                dessa forma somente na página de editar o perfil, vai aparecer esse bloco-->
+            {% endblock %}
 
-                    <div class="form-group">
-                        {{ form.corpo.label(class="form-control-label") }}
-                        {% if form.corpo.errors %}
-                            {{ form.corpo(class="form-control is-invalid") }}
-                            <div class="invalid-feedback">
-                                {% for erro in form.corpo.errors %}
-                                    {{ erro }}
-                                {% endfor %}
-                            </div>
-                        {% else %}
-                            {{ form.corpo(class="form-control") }}
-                        {% endif %}
-                    </div>
-                </fieldset>
-
-                {{ form.botao_submit(class="btn btn-primary mt-2") }}
-            </form>
-            </div>
-        {% endif %}
 
     <div class="row mt-5"></div>
 </div>
