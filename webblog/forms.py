@@ -47,6 +47,11 @@ class FormLogin(FlaskForm):
     lembrar_dados = BooleanField('Lembrar dados de acesso')
     botao_submit_login = SubmitField('Entrar')  # botoes devem ter nomes diferentes pois estarão na mesma página
 
+    def validate_email(self, email):
+        usuario = Usuario.query.filter_by(email=email.data).first()  # verificando se o e-mail existe no BD
+        if not usuario:  # se não retornar, informa que não existe usuário com esse e-mail
+            raise ValidationError('Não existe usuário vinculado ao e-mail informado. Tente novamente ou cadastre-se.')
+
 
 class FormEditarPerfil(FlaskForm):
     username = StringField('Nome de usuário', validators=[DataRequired()])
@@ -56,7 +61,7 @@ class FormEditarPerfil(FlaskForm):
     curso_vba = BooleanField('VBA Impressionador')
     curso_powerbi = BooleanField('Power BI Impressionador')
     curso_python = BooleanField('Python Impressionador')
-    curso_ppt = BooleanField('Apresentações Impressionadoras')
+    curso_ppt = BooleanField('Power Point Impressionadoras')
     curso_sql = BooleanField('SQL Impressionador')
     botao_submit_editar_perfil = SubmitField('Confirmar Edição')
 

@@ -1,10 +1,8 @@
 # # arquivo para testes de criação e consulta do banco de dados
 # # está comentado para evitar erros durante a execução do programa
 
-
 from webblog import app, database  # importando app e database
 from webblog.models import Usuario, Post  # importando as classes Usuário e Post
-
 
 # # todos os comandos no seu banco de dados deve estar contido em um with, conforme abaixo
 # # ao rodar esses comandos, o arquivo com o banco de dados deve constar na pasta 'instance'
@@ -35,46 +33,48 @@ from webblog.models import Usuario, Post  # importando as classes Usuário e Pos
 #     # pode ser realizado apenas uma vez, no final das operações
 #     database.session.commit()
 
-
 # =====================================
 # # fazendo consultas ao BD para verificar os usuarios
 # =====================================
-
-with app.app_context():
-    meus_usuarios = Usuario.query.all()  # pegando todas as informações do BD
-    meus_posts = Post.query.all()
-    # print(f'\nObtendo a lista de usuários com o query.all(): {meus_usuarios}')
-    # primeiro_usuario = Usuario.query.first()  # pegando apenas o primeiro usuario da lista
-    # primeiro_usuario = Usuario.query[0]  # pegando apenas o primeiro usuario da lista
-    # segundo_usuario = meus_usuarios[1]  # pegando apenas o segundo usuario da lista
-    #
-    # # pegando informações dos usuarios
-    # print('\nObtendo informacoes dos usuarios')
-    # print(f'Email primeiro usuario: {primeiro_usuario.email}')
-    # print(f'ID primeiro usuario: {primeiro_usuario.id}')
-    # print(f'Qtde de posts primeiro usuario: {primeiro_usuario.posts}')
+#
+# with app.app_context():
+#     meus_usuarios = Usuario.query.all()  # pegando todas as informações do BD
+#     meus_posts = Post.query.all()
+#     print(f'\nObtendo a lista de usuários com o query.all(): {meus_usuarios}')
+#     primeiro_usuario = Usuario.query.first()  # pegando apenas o primeiro usuario da lista
+#     primeiro_usuario = Usuario.query[0]  # pegando apenas o primeiro usuario da lista
+#     segundo_usuario = meus_usuarios[1]  # pegando apenas o segundo usuario da lista
+#
+#     # pegando informações dos usuarios
+#     print('\nObtendo informacoes dos usuarios')
+#     print(f'Email primeiro usuario: {primeiro_usuario.email}')
+#     print(f'ID primeiro usuario: {primeiro_usuario.id}')
+#     print(f'Qtde de posts primeiro usuario: {primeiro_usuario.posts}')
 #
 #     # utilizando busca com critérios no banco de dados, usando condições, como o e-mail por exemplo
 #     usuario_teste = Usuario.query.filter_by(email='vitor3@gmail.com').first()
 #     print(f'\nUsuario com o email = vitor3@gmail.com: {usuario_teste}')
 #     print(f'Username do usuario com o email = vitor3@gmail.com: {usuario_teste.username}')
 #
-print('\nListando todas as informacoes do BD usando loop for:')
-for usuario in meus_usuarios:
-    print(f'Username: {usuario.username}')
-    print(f'Email: {usuario.email}')
-    print(f'Senha: {usuario.senha}')
-    print(f'Cursos: {usuario.cursos}')
-    print(f'Foto do Perfil: {usuario.foto_perfil}')
-    print('\n')
+with app.app_context():
+    meus_usuarios = Usuario.query.all()  # pegando todas as informações do BD
+    meus_posts = Post.query.all()
+    print('\nListando todas as informacoes de Usuário no Banco de Dados:')
+    for usuario in meus_usuarios:
+        print(f'Username: {usuario.username}')
+        print(f'Email: {usuario.email}')
+        print(f'Senha: {usuario.senha}')
+        print(f'Cursos: {usuario.cursos}')
+        print(f'Foto do Perfil: {usuario.foto_perfil}')
+        print('\n')
 
-print('\n Listando todos os Posts no banco de dados')
-for posts in meus_posts:
-    print(f'ID: {posts.id}')
-    print(f'ID Usuario: {posts.id_usuario}')
-    print(f'Data de criacao: {posts.data_criacao}')
-    print(f'Titulo: {posts.titulo}')
-    print(f'Corpo: {posts.corpo}')
+    print('\nListando todos os Posts no Banco de Dados')
+    for posts in meus_posts:
+        print(f'ID: {posts.id}')
+        print(f'ID Usuario: {posts.id_usuario}')
+        print(f'Data de criacao: {posts.data_criacao}')
+        print(f'Titulo: {posts.titulo}')
+        print(f'Corpo: {posts.corpo}')
 
 
 # =====================================

@@ -8,27 +8,23 @@ from flask_login import current_user  # método que verifica o usuário que est�
 from flask_login import login_required
 # função que usamos como um decorator, para controle/bloqueio de páginas por usuários não logados
 
-from datetime import datetime
-
 import secrets
 import os
 # secrets para gerar o código para atualizar imagem de perfil e OS para separar o nome da imagem da extensão
 
 from PIL import Image  # biblioteca Pillow (install Pillow) para compactar a imagem de maneira fácil
 
-
 # route é método que faz parte da classe Flask, o @ antes significa que é um decorator, é uma função que atribui uma
 # nova funcionalidade para a função que vem abaixo dele, ou seja, a função home tem a funcionalidade de exibir
 # o seu codigo quando o link '/' for acionado, ou seja, homepage
+
+
 @app.route('/')  # mostra o caminho (URL) de onde a página será mostrada, nesse caso é a homepage
 def home():  # função que informa o que será mostrado na página, usaremos a pasta 'templates' para arquivos HTML
     # ordenando a exibição dos Posts por ID
-    check = Post.query.all()
-    if check:
-        posts = Post.query.order_by(Post.id.desc())
-        return render_template('home.html', posts=posts)
-    else:
-        abort(404)  # o abort informa mensagem de erro 403 (Forbidden)
+
+    posts = Post.query.order_by(Post.id.desc())
+    return render_template('home.html', posts=posts)
 
 
 @app.route('/contato')
@@ -80,6 +76,7 @@ def login():
         # cria novo usuario, instanciando a classe Usuario() - cada usuário seria um novo objeto
         database.session.add(usuario)  # adicionando a variável usuario à sessão do banco de dados
         database.session.commit()  # inserindo os dados no banco de dados
+        login_user(usuario)  # realiza o login na sequência
         flash(f'Conta criada para o e-mail: {form_criarconta.email.data}', 'alert-success')
         return redirect(url_for('home'))
 

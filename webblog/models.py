@@ -35,6 +35,7 @@ class Usuario(database.Model, UserMixin):
     def contar_posts(self):
         return len(self.posts)  # retorna como resposta a quantidade que o usuário tem de posts
 
+
 class Post(database.Model):
     id = database.Column(database.Integer, primary_key=True)
     titulo = database.Column(database.String, nullable=False)
