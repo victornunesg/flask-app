@@ -50,7 +50,8 @@ from webblog import models
 # importamos nesse lugar pois as variáveis são criadas somente acima, evitando o problema de importação circular
 engine = sqlalchemy.create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
 # cria uma engine para avaliar o BD, passando o link do BD
-if not engine.has_table("usuario"):
+inspector = sqlalchemy.inspect(engine)
+if not inspector.has_table("usuario"):
     # verifica se tem a tabela usuario, tem que ser com o U minusculo
     with app.app_context():
         database.drop_all()
