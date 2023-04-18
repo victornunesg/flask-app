@@ -25,7 +25,8 @@ if os.getenv("DATABASE_URL"):  # comando para pegar a variável de ambiente do B
     app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL")
 else:
     # caso contrário, utiliza o BD local
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:OH11cFlhycelc4IbKfo6@containers-us-west-8.railway.app:8074/railway'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///banco_de_dados.db'
+    # 'postgresql://postgres:OH11cFlhycelc4IbKfo6@containers-us-west-8.railway.app:8074/railway'
 
 # acima temos a configuração de onde ficará o banco de dados do aplicativo
 # esse _DATABASE_URI é o caminho local onde ficará o banco de dados, 'sqlite:///' por padrão seguido do nome do BD
