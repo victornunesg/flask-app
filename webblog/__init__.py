@@ -20,12 +20,13 @@ app.config['SECRET_KEY'] = '952975e9b8f4856c555784420cf99476'
 # após isso será gerado token hex com 16 caracteres
 # com isso, passamos uma configuração no nosso arquivo main para o app do flask, a chave do app
 
-if os.getenv("DATABASE_URL"):  # comando para pegar a variável de ambiente do Banco de Dados PostgreSQL
-    # se a variável 'DATABASE_URL' existe, ou seja, se o código está sendo rodado pelo servidor, pega o BD de lá
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL")
-else:
-    # caso contrário, utiliza o BD local
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///banco_de_dados.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:OH11cFlhycelc4IbKfo6@containers-us-west-8.railway.app:8074/railway'
+# if os.getenv("DATABASE_URL"):  # comando para pegar a variável de ambiente do Banco de Dados PostgreSQL
+#     # se a variável 'DATABASE_URL' existe, ou seja, se o código está sendo rodado pelo servidor, pega o BD de lá
+#     app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL")
+# else:
+#     # caso contrário, utiliza o BD local
+#     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///banco_de_dados.db'
 
 # acima temos a configuração de onde ficará o banco de dados do aplicativo
 # esse _DATABASE_URI é o caminho local onde ficará o banco de dados, 'sqlite:///' por padrão seguido do nome do BD

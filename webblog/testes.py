@@ -11,8 +11,8 @@ from webblog.models import Usuario, Post  # importando as classes Usuário e Pos
 # # criando o banco de dados
 # =====================================
 #
-# with app.app_context():
-#     database.create_all()  # após criar a base pela primeira vez, deixar esse comando comentado
+with app.app_context():
+    database.create_all()  # após criar a base pela primeira vez, deixar esse comando comentado
 
 
 # =====================================
@@ -56,25 +56,25 @@ from webblog.models import Usuario, Post  # importando as classes Usuário e Pos
 #     print(f'\nUsuario com o email = vitor3@gmail.com: {usuario_teste}')
 #     print(f'Username do usuario com o email = vitor3@gmail.com: {usuario_teste.username}')
 #
-with app.app_context():
-    meus_usuarios = Usuario.query.all()  # pegando todas as informações do BD
-    meus_posts = Post.query.all()
-    print('\nListando todas as informacoes de Usuário no Banco de Dados:')
-    for usuario in meus_usuarios:
-        print(f'Username: {usuario.username}')
-        print(f'Email: {usuario.email}')
-        print(f'Senha: {usuario.senha}')
-        print(f'Cursos: {usuario.cursos}')
-        print(f'Foto do Perfil: {usuario.foto_perfil}')
-        print('\n')
-
-    print('\nListando todos os Posts no Banco de Dados')
-    for posts in meus_posts:
-        print(f'ID: {posts.id}')
-        print(f'ID Usuario: {posts.id_usuario}')
-        print(f'Data de criacao: {posts.data_criacao}')
-        print(f'Titulo: {posts.titulo}')
-        print(f'Corpo: {posts.corpo}')
+# with app.app_context():
+#     meus_usuarios = Usuario.query.all()  # pegando todas as informações do BD
+#     meus_posts = Post.query.all()
+#     print('\nListando todas as informacoes de Usuário no Banco de Dados:')
+#     for usuario in meus_usuarios:
+#         print(f'Username: {usuario.username}')
+#         print(f'Email: {usuario.email}')
+#         print(f'Senha: {usuario.senha}')
+#         print(f'Cursos: {usuario.cursos}')
+#         print(f'Foto do Perfil: {usuario.foto_perfil}')
+#         print('\n')
+#
+#     print('\nListando todos os Posts no Banco de Dados')
+#     for posts in meus_posts:
+#         print(f'ID: {posts.id}')
+#         print(f'ID Usuario: {posts.id_usuario}')
+#         print(f'Data de criacao: {posts.data_criacao}')
+#         print(f'Titulo: {posts.titulo}')
+#         print(f'Corpo: {posts.corpo}')
 
 
 # =====================================

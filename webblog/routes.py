@@ -47,8 +47,9 @@ def usuarios():
 def cadastro():
     form_criarconta = FormCriarConta()  # form_criarconta será instância da classe FormCriarConta()
     if form_criarconta.validate_on_submit() and 'botao_submit_criar_conta' in request.form:
-        senha_cript = bcrypt.generate_password_hash(form_criarconta.senha.data)
-        # transformará a senha do usuário em criptografada
+        senha_cript = bcrypt.generate_password_hash(form_criarconta.senha.data).decode("utf-8")
+        # transformará a senha do usuário em criptografada, o decode é para dar compatibilidade com o sistema de
+        # enconding padrão do postgres, garantindo que a senha a ser armazenada no BD remoto será a mesma
         # para verificar se as senhas batem, utiliza-se o método bcrypt.check_password_hash(SENHA1, SENHA2)
         usuario = Usuario(username=form_criarconta.username.data, email=form_criarconta.email.data, senha=senha_cript)
         # cria novo usuario, instanciando a classe Usuario() - cada usuário seria um novo objeto
