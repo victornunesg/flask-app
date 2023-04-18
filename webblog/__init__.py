@@ -1,6 +1,6 @@
 # este arquivo serve como inicializador do app, contendo as configurações iniciais do Flask
 # toda vez que o webblog for chamado, ele é executado
-
+import sqlalchemy
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy  # (install flask-sqlalchemy) para usar o banco de dados
 from flask_login import LoginManager  # (install flask-login) para validar dados de login
@@ -25,7 +25,7 @@ if os.getenv("DATABASE_URL"):  # comando para pegar a variável de ambiente do B
     app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL")
 else:
     # caso contrário, utiliza o BD local
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:OH11cFlhycelc4IbKfo6@containers-us-west-8.railway.app:8074/railway'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///banco_de_dados.db'
 
 # acima temos a configuração de onde ficará o banco de dados do aplicativo
 # esse _DATABASE_URI é o caminho local onde ficará o banco de dados, 'sqlite:///' por padrão seguido do nome do BD
@@ -37,13 +37,29 @@ login_manager = LoginManager(app)  # declarando a variável para aplicar a class
 database = SQLAlchemy(app)  # SQLAlchemy permite a criação do BD em formato de classes, criando a instância de acordo
 # com as configurações que setamos para o app
 
-
 login_manager.login_view = 'login'
 # login_view mostrará a página em que o usuário será redirecionado caso seja página onde o login é exigido
 # deve-se passar como um texto o nome da função pra onde você quer que seja direcionado
 
 login_manager.login_message_category = 'alert-info'
 # passando o parâmetro que define a categoria do alerta ao ser redirecionado
+
+from webblog import models
+# essa importação é necessária para que a base de dados seja criada com as tabelas
+# se não tiver, a base de dados é criada sem as tabelas de Post e Usuario
+# importamos nesse lugar pois as variáveis são criadas somente acima, evitando o problema de importação circular
+engine = sqlalchemy.create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
+# cria uma engine para avaliar o BD, passando o link do BD
+if not engine.has_table("usuario"):
+    # verifica se tem a tabela usuario, tem que ser com o U minusculo
+    with app.app_context():
+        database.drop_all()
+        database.create_all()
+        print("Banco de dados criado.")
+        # se não tem a tabela, faz o drop e o create na sequencia, recriando o BD
+else:
+    print("Banco de dados já existente.")
+    # se já tem a tabela, só printa para sabermos dessa informação
 
 from webblog import routes
 # é necessário executar o arquivo routes para colocar os links no ar
