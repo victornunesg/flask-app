@@ -11,8 +11,8 @@ from webblog.models import Usuario, Post  # importando as classes Usuário e Pos
 # # criando o banco de dados
 # =====================================
 #
-with app.app_context():
-    database.create_all()  # após criar a base pela primeira vez, deixar esse comando comentado
+# with app.app_context():
+#     database.create_all()  # após criar a base pela primeira vez, deixar esse comando comentado
 
 
 # =====================================
