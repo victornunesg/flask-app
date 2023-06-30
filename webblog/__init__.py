@@ -10,7 +10,6 @@ import os  # para auxiliar na conexão com o banco de dados PostgreSQL, no Railw
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '952975e9b8f4856c555784420cf99476'
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:wbRbJWd2JaHZLeleZzl8@containers-us-west-73.railway.app:5829/railway'  # informa caminho onde o BD local será salvo
 
 """ app = Flask(__name__) significa que o app é uma instancia da classe flask com o parâmetro name
 indica ao flask que o arquivo é um site e conecta os demais códigos que irão compor o site(outros arquivos, HTML, etc)
