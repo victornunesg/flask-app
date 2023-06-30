@@ -57,6 +57,7 @@ def cadastro():
         database.session.commit()  # inserindo os dados no banco de dados
         login_user(usuario)  # realiza o login na sequência
         flash(f'Conta criada para o e-mail: {form_criarconta.email.data}', 'alert-success')
+        print(database.__dict__)
         return redirect(url_for('home'))
 
     return render_template('cadastro.html', form_criarconta=form_criarconta)
