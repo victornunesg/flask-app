@@ -58,21 +58,28 @@ evitando o problema de importação circular. Quanto à importação de routes, 
 colocar os links no ar, diferentemente das demais importações, essa tem que vir por último, pois o routes precisa do app
 que é criado depois das primeiras importações. """
 from webblog import models
+
+# cria uma engine para avaliar o BD, passando o link do BD sendo utilizado (local ou remoto)
+engine = sqlalchemy.create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
+inspector = sqlalchemy.inspect(engine)  # inspecionando o banco de dados através do inspect
+if not inspector.has_table("usuario"):
+    # verifica se tem a tabela usuario, tem que ser com o U minusculo
+    # se não tem a tabela, faz o drop e o create na sequencia, recriando o BD garantindo que a estrutura é a correta
+    with app.app_context():
+        database.drop_all()
+        database.create_all()
+        print("Banco de dados criado.")
+
+else:
+    # se já tem a tabela, só printa para sabermos dessa informação
+    print("Banco de dados já existente.")
+
+""" A importação de routes é feita aqui pois é necessário executar o arquivo routes para colocar os links no ar.
+Diferentemente das demais importações, essa tem que vir por último, pois o routes precisa do app que é criado depois das
+primeiras importações. """
 from webblog import routes
 
 
-# cria uma engine para avaliar o BD, passando o link do BD
-# engine = sqlalchemy.create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
-# inspector = sqlalchemy.inspect(engine)
-# if not inspector.has_table("usuario"):
-#     # verifica se tem a tabela usuario, tem que ser com o U minusculo
-#     with app.app_context():
-#         database.drop_all()
-#         database.create_all()
-#         print("Banco de dados criado.")
-#         # se não tem a tabela, faz o drop e o create na sequencia, recriando o BD
-# else:
-#     print("Banco de dados já existente.")
-#     # se já tem a tabela, só printa para sabermos dessa informação
+
 
 

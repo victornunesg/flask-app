@@ -18,7 +18,8 @@
 9) Feito isso, dar commit e push no github para sincronizar o código no repositório remoto, pois o Railway está sincronizado com o Github
 10) No Railway, dentro do projeto, ir em New > Github Repo e selecionar o repositório a ser importado para iniciar o deploy
 11) Finalizando o deploy, clicar no repositório espelhado no Railway e ir em Settings > Generate Domain para criar o domínio do site
-12) Caso dê problema no deploy, verificar os logs para entender o motivo. Normalmente pede-se a instalação do psycopg2 para realizar a comunicação com o BD do servidor
+12) Entrar no projeto > Variables para adicionar a variável referência do BD, ou seja, selecionar "DATABASE_URL" e adicionar
+13) Caso dê problema no deploy, verificar os logs para entender o motivo. Normalmente pede-se a instalação do psycopg2 para realizar a comunicação com o BD do servidor
 
 ======================
 PENDÊNCIAS
