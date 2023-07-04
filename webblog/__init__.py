@@ -29,11 +29,11 @@ já a primeira clausula do if verifica se existe a variável de ambiente do BD d
 if os.getenv("DATABASE_URL"):  # pega a variável de ambiente do Banco de Dados PostgreSQL
     # se a variável 'DATABASE_URL' existe, ou seja, se o código está sendo rodado pelo servidor, pega o BD de lá
     app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL")
-    print('\nConectado com banco de dados do servidor.')
+    print('\nRodando pelo servidor do Rail.')
 else:
     # caso contrário, utiliza o BD local
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///banco_de_dados.db'
-    print('\nConectado com banco de dados local.')
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:wbRbJWd2JaHZLeleZzl8@containers-us-west-73.railway.app:5829/railway'
+    print('\nRodando localmente.')
 
 # criando BD em formato de classes, instanciando de acordo com as configurações que setamos para o app
 database = SQLAlchemy(app)
