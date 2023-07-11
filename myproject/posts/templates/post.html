@@ -1,0 +1,86 @@
+{% extends 'base.html' %} <!--informa que esse arquivo puxa informacoes do base.html-->
+
+{% block body %}
+
+ <!--Usamos um container para melhor estruturar a página-->
+<div class="container mt-3">
+        <!--meupost é uma classe que foi definida no css (main.css)-->
+        <div class="row border mt-4 p-4 meupost" >
+
+            <!--O Bootstrap divide a tela em linhas e colunas, onde o tamanho máximo de colunas (tela cheia) são 12
+            Desta forma, estamos dividindo em 2 colunas, uma com 3 posições e outra com 9, de modo a ocupar a tela toda-->
+            <div class="col col-2">
+                <div class="image pe-2">
+                    <img src="{{  url_for('static', filename='profile_pictures/{}'.format(post.autor.foto_perfil)) }}" class="rounded" width="200" >
+                    <br>
+                    <strong>{{ post.autor.username }}</strong>
+
+                    <!--Div que coloca as tags dos cursos em que o usuário está inscrito-->
+                    <div class="row justify-content-center">
+                        <!--Transforma a string de cursos em uma lista para percorrer e gerar um botão diferente para cada curso-->
+                        {% for curso in post.autor.cursos.split(';') %}
+                            <button type="button" class="btn btn-success mt-2" disabled>{{ curso }}</button>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="col col-9">
+                <h3>{{ post.titulo }}
+                    <!--strftime é uma função que formata uma data de acordo com o especificado em seu parâmetro, o padrão é %d/%m/%Y -->
+                    <small class="text-muted" style="font-size:15px">
+                        -   Data de criação: {{ post.data_criacao.strftime('%d/%m/%Y') }}
+                        {% if current_user == post.autor %}  <!-- caso o usuário seja o dono do post, o form de edição do post aparecerá, então disponibilzaremos os links conforme abaixo-->
+                            - <a href="{{ url_for('posts_bp.editar_post', post_id=post.id) }}">Editar Post</a> /
+                            <a href="" data-bs-toggle="modal" data-bs-target="#ExcluirPost" class="text-danger">Excluir Post</a> <!--Faz o link com o Modal, do Bootstrap (definido por último no código)-->
+                        {% endif %}
+
+                    </small>
+                </h3>
+                <p>{{ post.corpo }}</p>
+
+                <br>
+            </div>
+
+        </div>
+
+        <!--No bloco abaixo, caso o usuário logado seja o autor do post, aparecerá o formulário para edição
+            Basicamente adaptamos o formulário de criar post em cirarpost.html-->
+
+            {% block form_editar_post %}
+             <!--Aqui somente inicializamos o bloco, o qual será detalhado no arquivo editarperfil.html
+                dessa forma somente na página de editar o perfil, vai aparecer esse bloco-->
+            {% endblock %}
+
+
+    <div class="row mt-5"></div>
+</div>
+
+
+<!-- Modal, código diretamente do Bootstrap para aparecer o pop-up ao excluir o post -->
+<div class="modal fade" id="ExcluirPost" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Excluir Post</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Deseja realmente excluir o post? <br> (Essa ação não pode ser desfeita).
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+
+          <!--Nessa parte alteramos, inserimos o botão de excluir o Post dentro de um formulário vazio para que, quando acionado
+          o botão realize uma ação através do formulário, para chamar a função 'excluir_post', definida em routes.py.
+          Também foi necessário alterar o type do botão para 'submit', pois estava somente 'button', não realizava ação ao ser clicado para submeter o formulário-->
+          <form method="POST" action=" {{ url_for('posts_bp.excluir_post', post_id=post.id) }}">
+              <button type="submit" class="btn btn-danger">Excluir Post</button>
+          </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

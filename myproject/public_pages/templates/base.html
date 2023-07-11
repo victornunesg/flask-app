@@ -1,0 +1,49 @@
+<!--Nesse arquivo definiremos todas as configurações em comum para as páginas do site usando Python tags no HTML-->
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+
+    <title>Flask App</title>
+
+    <!-- Código de instalação do Bootstrap, basicamente um CSS para formatar o HTML -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+
+    <!-- Link para o arquivo CSS dentro de 'static' responsável por personalizar a página de perfil-->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css')}}">
+
+    <!--blocos que o Flask consegue integrar a todos os demais arquivos HTML-->
+    {% block head %}
+
+    {% endblock %}
+</head>
+<body>
+
+    <!--inserindo a barra de navegação diretamente do bootstrap, o código está em um arquivo separado para melhor organização-->
+    {% include 'navbar.html' %}
+
+    <!--
+    aqui iremos construir os alertas de mensagem que podem acontecer em qualquer página do site
+    with serve para percorrer todas as mensagens do site, nome da variavel = mensagens
+    parametro de categorias da função get_flashed_messages (função do flask) irá permitir a personalização de acordo com a mensagem a ser exibida
+    a variável mensagens receberá uma lista com todas as mensagens do site
+    -->
+    <div class="container">
+        {% with mensagens = get_flashed_messages(with_categories=True) %}
+            {% if mensagens %} <!--verifica se tem alguma mensagem dentro da variável-->
+                {% for categoria, mensagem in mensagens %} <!--aqui estamos fazendo um unpacking: a mensagem é o texto a ser exibido, a categoria é qual a categoria que iremos passar (do bootstrap)-->
+                    <div class="alert {{ categoria }}"> <!--o tipo de alerta vai variar de acordo com a categoria da mensagem a ser passada pelo main (ver no bootstrap)-->
+                        {{ mensagem }} <!--exibindo o texto da mensagem em uma div personalizada de acordo com as classes de alerta do bootstrap-->
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+
+    {% block body %}
+    {% endblock %}
+
+    <!-- Código de instalação do Bootstrap, para incluir o JavaScript no site-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+</body>
+</html>
