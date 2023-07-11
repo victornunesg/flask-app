@@ -1,6 +1,0 @@
-venv/
-webblog/__pycache__/
-.idea/
-__pycache__/
-instance/
-webblog/banco_de_dados.db
