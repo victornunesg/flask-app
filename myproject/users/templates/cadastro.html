@@ -2,11 +2,11 @@
 
 {% block body %}
   <div class="container"> <!--usamos a classe container para melhor estruturar o código na página-->
-    <br><h1>Criar conta</h1><hr>
+    <br><h1>Create account</h1><hr>
     <div class="card p-9 mt-5">
         <form method="POST" action="" class="border p-4  mt-2">
           {{ form_criarconta.csrf_token }}
-          <legend>Faça o seu cadastro:</legend>
+          <legend>Join us:</legend>
           <fieldset>
             <div class="form-group">
               {{ form_criarconta.username.label(class="form-control-label") }}

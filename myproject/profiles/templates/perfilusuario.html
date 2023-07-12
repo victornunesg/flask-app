@@ -5,7 +5,7 @@
 <!--formatando de acordo com os parâmetros do bootstrap-->
 <div class="container">
     <br>
-    <h1>Meu Perfil</h1>
+    <h1>My Profile</h1>
     <hr>
     <div class="container mt-5 d-flex justify-content-center">
         <div class="card p-3">
@@ -22,7 +22,7 @@
 
                     <div class="p-2 mt-2 bg-primary d-flex justify-content-between rounded text-white stats">
                         <div class="d-flex flex-column">
-                            <span class="articles">Cursos</span>
+                            <span class="articles">Courses</span>
                             <!--Para somar a quantidade de cursos também poderíamos ter utilizado o split e depois contar o tamanho da lista-->
                             <span class="number1">
                                 {% if 'Não informado' in current_user.cursos: %}
@@ -40,7 +40,7 @@
                     </div>
 
                     <div class="button mt-2 d-flex flex-row align-items-center">
-                        <a class="w-100" href="{{ url_for('profiles_bp.editar_perfil') }}"><button class="btn btn-sm btn-outline-primary w-100">Editar Perfil</button></a>
+                        <a class="w-100" href="{{ url_for('profiles_bp.editar_perfil') }}"><button class="btn btn-sm btn-outline-primary w-100">Update Profile</button></a>
                     </div>
 
                 </div>
@@ -51,7 +51,7 @@
     <!--nessa div estaremos colocando as tags com os cursos em que o usuário está inscrito-->
     <div class="row justify-content-center">
         <div class="col col-4" style="text-align: center">
-            <strong>Cursos</strong><br>
+            <strong>Courses</strong><br>
             <!--Transforma a string de cursos em uma lista para percorrer e gerar um botão diferente para cada curso-->
             {% for curso in current_user.cursos.split(';') %}
                 <button type="button" class="btn btn-success mt-2" disabled>{{ curso }}</button>

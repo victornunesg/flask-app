@@ -29,10 +29,10 @@
                 <h3>{{ post.titulo }}
                     <!--strftime é uma função que formata uma data de acordo com o especificado em seu parâmetro, o padrão é %d/%m/%Y -->
                     <small class="text-muted" style="font-size:15px">
-                        -   Data de criação: {{ post.data_criacao.strftime('%d/%m/%Y') }}
+                        -   Creation date: {{ post.data_criacao.strftime('%d/%m/%Y') }}
                         {% if current_user == post.autor %}  <!-- caso o usuário seja o dono do post, o form de edição do post aparecerá, então disponibilzaremos os links conforme abaixo-->
-                            - <a href="{{ url_for('posts_bp.editar_post', post_id=post.id) }}">Editar Post</a> /
-                            <a href="" data-bs-toggle="modal" data-bs-target="#ExcluirPost" class="text-danger">Excluir Post</a> <!--Faz o link com o Modal, do Bootstrap (definido por último no código)-->
+                            - <a href="{{ url_for('posts_bp.editar_post', post_id=post.id) }}">Edit Post</a> /
+                            <a href="" data-bs-toggle="modal" data-bs-target="#ExcluirPost" class="text-danger">Delete Post</a> <!--Faz o link com o Modal, do Bootstrap (definido por último no código)-->
                         {% endif %}
 
                     </small>
@@ -62,20 +62,20 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Excluir Post</h1>
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Delete Post</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        Deseja realmente excluir o post? <br> (Essa ação não pode ser desfeita).
+        Do you really want to delete this post? <br> (This action can not be undone).
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
 
           <!--Nessa parte alteramos, inserimos o botão de excluir o Post dentro de um formulário vazio para que, quando acionado
           o botão realize uma ação através do formulário, para chamar a função 'excluir_post', definida em routes.py.
           Também foi necessário alterar o type do botão para 'submit', pois estava somente 'button', não realizava ação ao ser clicado para submeter o formulário-->
           <form method="POST" action=" {{ url_for('posts_bp.excluir_post', post_id=post.id) }}">
-              <button type="submit" class="btn btn-danger">Excluir Post</button>
+              <button type="submit" class="btn btn-danger">Delete Post</button>
           </form>
 
       </div>

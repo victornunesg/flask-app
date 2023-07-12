@@ -2,34 +2,33 @@
 
 {% block body %}
 <div class="container mt-3"> <!--using a container to give a better format/structure in the page-->
-    <h1>Seja bem-vindo ao meu primeiro blog!</h1>
+    <h1>Welcome to Flask App!</h1>
     <hr>
     <h4 style="color:dark-gray">
     </h4>
     <p>
-        O objetivo principal é aprimorar os conhecimentos no Python através da utilização de bibliotecas que auxiliam o
-        desenvolvimento web, bem como a integração com banco de dados local e também nos servidores do Railway. O Blog
-        conta com validações durante o login e operações com posts, bem como apresenta restrição de telas caso o usuário
-        não esteja logado.
+        The main objective is to improve knowledge in Python through the use of libraries that help web development, as
+        well as integration with a local database and also on Railway servers. The Blog has validations during login and
+        operations with posts, as well as screen restrictions if the user is not logged in.
         <br><br>
-        Principais funcionalidades:
+        Main functionalities:
         <ul>
-            <li>Criação de usuários;</li>
-            <li>Criação e edição de posts;</li>
-            <li>Edição do perfil do usuário</li>
+            <li>User creation;</li>
+            <li>Post creation and edition (login required);</li>
+            <li>User's profile edition (login required)</li>
         </ul>
-        O desenvolvimento do blog foi feito utilizando:
+        The development was done using mainly:
         <ul>
             <li>Python</li>
             <li>Flask</li>
             <li>SQLAlchemy</li>
-            <li>HTMl, CSS e JS/Bootstrap para o Front-End.</li>
+            <li>HTMl, CSS e JS/Bootstrap.</li>
         </ul>
 
-        Link do repositório: <a href="https://github.com/victornunesg/web-blog">Github</a>
+        Repository link: <a href="https://github.com/victornunesg/flask-app">Github</a>
     </p>
     <hr>
-    <h3>Confira todas as publicações:</h3>
+    <h3>Check our posts:</h3>
     {% if posts %}
         {% for post in posts %}
             <!--meupost é uma classe que foi definida no css (main.css)-->
@@ -55,7 +54,7 @@
                     <a style="text-decoration: none; color:black" href="{{ url_for('posts_bp.exibir_post', post_id=post.id) }}"><h3>{{ post.titulo }}</h3></a>
                     <p>{{ post.corpo }}</p>
                     <br>
-                    <span> Data de criação: {{ post.data_criacao.strftime('%d/%m/%Y') }}</span>
+                    <span> Creation date: {{ post.data_criacao.strftime('%d/%m/%Y') }}</span>
                     <br>
 
                 </div>

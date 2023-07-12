@@ -4,33 +4,33 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link" aria-current="page" href="{{ url_for('public_pages_bp.home') }}">Início</a> <!--o comando url_for associa o link à função definida para cada página dentro do decorator, em main.py-->
+          <a class="nav-link" aria-current="page" href="{{ url_for('public_pages_bp.home') }}">Home</a> <!--o comando url_for associa o link à função definida para cada página dentro do decorator, em main.py-->
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{{ url_for('users_bp.usuarios') }}">Usuários</a>
+          <a class="nav-link" href="{{ url_for('users_bp.usuarios') }}">Users</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{{ url_for('public_pages_bp.contato') }}">Contatos</a>
+          <a class="nav-link" href="{{ url_for('public_pages_bp.contato') }}">Contact</a>
         </li>
       </ul>
       <ul class="d-flex navbar-nav"> <!-- classe dflex deixa os itens lado a lado e a navbar-nav formata -->
         <!--Temos um if para condicionar o menu se o usuário estiver logado ou não-->
         {% if current_user.is_authenticated %}  <!--método do flask login > current user -->
           <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('posts_bp.criar_post') }}">Criar Post</a>
+            <a class="nav-link" href="{{ url_for('posts_bp.criar_post') }}">Create Post</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('profiles_bp.perfil') }}">Meu Perfil</a>
+            <a class="nav-link" href="{{ url_for('profiles_bp.perfil') }}">My Profile</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('users_bp.sair') }}">Sair</a>
+            <a class="nav-link" href="{{ url_for('users_bp.sair') }}">Log out</a>
           </li>
         {% else %}
           <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('users_bp.login') }}">Login</a>
+            <a class="nav-link" href="{{ url_for('users_bp.login') }}">Log in</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('users_bp.cadastro') }}">Criar conta</a>
+            <a class="nav-link" href="{{ url_for('users_bp.cadastro') }}">Create account</a>
           </li>
         {% endif %}
       </ul>

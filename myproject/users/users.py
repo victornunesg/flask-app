@@ -23,7 +23,7 @@ def cadastro():
         db.session.add(usuario)  # adicionando a variável usuario à sessão do banco de dados
         db.session.commit()  # inserindo os dados no banco de dados
         login_user(usuario)  # realiza o login na sequência
-        flash(f'Conta criada para o e-mail: {form_criarconta.email.data}', 'alert-success')
+        flash(f'Account created to the e-mail: {form_criarconta.email.data}', 'alert-success')
         return redirect(url_for('public_pages_bp.home'))
 
     return render_template('cadastro.html', form_criarconta=form_criarconta)
@@ -37,14 +37,14 @@ def login():
         usuario = Usuario.query.filter_by(email=form_login.email.data).first()
         if usuario and bcrypt.check_password_hash(usuario.senha, form_login.senha.data):
             login_user(usuario, remember=form_login.lembrar_dados.data)
-            flash(f'Login feito com sucesso no e-mail {form_login.email.data}', 'alert-success')
+            flash(f'Log in done successfully on e-mail {form_login.email.data}', 'alert-success')
             par_next = request.args.get('next')
             if par_next:
                 return redirect(par_next)
             else:
                 return redirect(url_for('public_pages_bp.home'))  # redirecionando o usuário para a homepage
         else:
-            flash('Falha no login, e-mail ou senha incorretos', 'alert-danger')
+            flash('Log in failure, wrong e-mail or password', 'alert-danger')
 
     return render_template('login.html', form_login=form_login)
 
@@ -53,5 +53,5 @@ def login():
 @login_required
 def sair():
     logout_user()  # realiza o logout do usuário automaticamente
-    flash(f'Logout feito com sucesso!', 'alert-success')
+    flash(f'Log out done successfully!', 'alert-success')
     return redirect(url_for('public_pages_bp.home'))

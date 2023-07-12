@@ -2,7 +2,7 @@
 
 {% block body %}
   <div class="container"> <!--usamos a classe container para melhor estruturar o código na página-->
-    <br><h1>Faça login para continuar</h1><hr>
+    <br><h1>Sign in to continue</h1><hr>
     <div class="card p-9 mt-5">
         <!--action é a ação do formulário, não sendo necessário passar valores neste caso
         method = POST significa que o formulário envia informações do usuário para o site, o contrário é requisições de GET, quando o site envia informações ao usuário
@@ -12,7 +12,7 @@
 
           {{ form_login.csrf_token }} <!--passando o token logo abaixo de cada form, por questões de segurança-->
 
-          <legend>Login</legend>
+          <legend>Log in</legend>
 
           <fieldset> <!--formata os campos do formulário, colocando-os na mesma linha-->
             <div class="form-group"> <!--separando e divs os grupos de itens do formulário para melhor visualização-->

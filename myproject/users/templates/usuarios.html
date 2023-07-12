@@ -3,7 +3,7 @@
 {% block body %}
 
 <div class="container"> <!--using a container to give a better format/structure in the page-->
-    <br><h1>Usuários</h1>
+    <br><h1>Users</h1>
     <hr>
 
     <!--nessa parte faremos um for para mostrar usuário por usuário da lista e usamos parte do código da página 'perfil.html' para personalizar o front end-->
@@ -24,7 +24,7 @@
         
                         <div class="p-2 mt-2 bg-primary d-flex justify-content-between rounded text-white stats">
                             <div class="d-flex flex-column">
-                                <span class="articles">Cursos</span>
+                                <span class="articles">Courses</span>
                                 <!--Para somar a quantidade de cursos também poderíamos ter utilizado o split e depois contar o tamanho da lista-->
                                 <span class="number1">
                                     {% if 'Não informado' in usuario.cursos: %}
@@ -51,7 +51,7 @@
         <!--nessa div estaremos colocando as tags com os cursos em que o usuário está inscrito-->
         <div class="row justify-content-center">
             <div class="col col-4" style="text-align: center">
-                <strong>Cursos</strong><br>
+                <strong>Courses</strong><br>
                 <!--Transforma a string de cursos em uma lista para percorrer e gerar um botão diferente para cada curso-->
                 {% for curso in usuario.cursos.split(';') %}
                     <button type="button" class="btn btn-success mt-2" disabled>{{ curso }}</button>

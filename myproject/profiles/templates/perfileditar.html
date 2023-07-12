@@ -14,7 +14,7 @@
 
             <form method="POST" action="" class="border p-4 mt-2" enctype="multipart/form-data">
                 {{ form.csrf_token }}
-                <legend>Editar Perfil</legend>
+                <legend>Update Profile</legend>
                 <fieldset>
                     <div class="form-group mt-2">
                         {{ form.username.label(class="form-control-label") }}
@@ -57,7 +57,7 @@
                     </div>
 
                     <hr>
-                    <p>Meus Cursos</p>
+                    <p>My Courses</p>
                     <!--Exibe todos os campos que se iniciam com 'cursos_' dentro do formulário usando o laço for-->
                         {% for campo in form %}
                             {% if 'curso_' in campo.name %}

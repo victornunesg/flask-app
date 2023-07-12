@@ -15,7 +15,7 @@ def criar_post():
         post = Post(titulo=form.titulo.data, corpo=form.corpo.data, autor=current_user)
         db.session.add(post)  # adicionando a variável usuario à sessão do banco de dados
         db.session.commit()  # inserindo os dados no banco de dados
-        flash('Post criado com sucesso!', 'alert-success')
+        flash('Post created successfully!', 'alert-success')
         return redirect(url_for('public_pages_bp.home'))
     return render_template('criarpost.html', form=form)
 
@@ -34,7 +34,7 @@ def editar_post(post_id):
         post.corpo = form.corpo.data
         # o post já existe, portanto posso dar o commit diretamente, sem a necessidade do session.add
         db.session.commit()
-        flash(f'Post editado com sucesso!', 'alert-success')
+        flash(f'Post edited successfully!', 'alert-success')
         return redirect(url_for('public_pages_bp.home'))
 
     return render_template('editarpost.html', post=post, form=form)
@@ -56,7 +56,7 @@ def excluir_post(post_id):
     if current_user == post.autor:
         db.session.delete(post)
         db.session.commit()
-        flash('Post excluído com sucesso', 'alert-danger')
+        flash('Post deleted successfully', 'alert-danger')
         return redirect(url_for('public_pages_bp.home'))
     else:
         abort(403)  # o abort informa mensagem de erro 403 (Forbidden)

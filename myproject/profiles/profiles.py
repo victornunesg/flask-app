@@ -80,7 +80,7 @@ def editar_perfil():
         current_user.cursos = atualizar_cursos(form)
 
         db.session.commit()
-        flash(f'Perfil atualizado com sucesso!', 'alert-success')
+        flash(f'Profile updated successfully!', 'alert-success')
         return redirect(url_for('profiles_bp.perfil'))
 
     foto_perfil = url_for('static', filename=f'profile_pictures/{current_user.foto_perfil}')
